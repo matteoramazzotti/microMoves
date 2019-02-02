@@ -17,4 +17,4 @@ The processing of images is performed using the following procedure:
 9. Depending on the distance form the two straight lines (the dashed one is just for reference), cell distance to the closest line will be reported on the text area on the left.
 10. Once finished, copy the content of the text area and apste in your analysis software (MS Excel, Liberoffice Calc or whatever)
 
-The current distribution includes a video representing a demo usage of this program.
+The current distribution includes a video showing a demo usage of this program. Look at it and everything will be clystal clear...
