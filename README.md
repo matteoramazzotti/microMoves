@@ -1,8 +1,7 @@
 # microMoves
 tools for measuring cell movements in microscopy
 
-#migraPix
-migraPix helps in quantifying migration of cells in wound-healing assays and is especially useful in co-culture condition. 
+<b>migraPix</b> helps in quantifying migration of cells in wound-healing assays and is especially useful in co-culture condition. 
 The 
 
 The tool is a simple javascript-enabled html file that must be saved in the same folder of the images to be analyzed.
