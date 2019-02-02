@@ -5,7 +5,7 @@ tools for measuring cell movements in microscopy
 
 The tool is a simple javascript-enabled html file that must be saved in the same folder of the images to be analyzed.
 Once started a web page is opened in the web browser. A very simple interface is present at this moment.
-The processing of images is performed following procedure:
+The processing of images is performed using the following procedure:
 1. click the "Browse" button and select the image to be analyzed.
 2. click the "Load image" button to show the image in the right panel. 
 3. If the size of the image is too big or too small, change the value of the zoom factor and click the "Load image" button again.
