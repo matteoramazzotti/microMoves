@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+		  body {
+		    margin: 0px;
+		    padding: 0px;
+		  }
+		</style>
+	</head> 
+	<body>
+		<table border=1><tr><td colspan=2>
+		<label for="filesel">File</label>
+		<input type="file" id="filesel" size=15 />
+		with zoom <input type="text" id="zoom" value="100" size=3 />%<br>
+		<button onclick="load()">Load image</button>
+		<button onclick="cleartext()">Clear</button>
+		</td>
+		</tr>
+		<tr>
+		<td valign="top">Values<br><textarea id="text" cols=10 rows=70></textarea></td>
+		<td><canvas id="canvas" width=1000 height=1000 style="border:1px solid #d3d3d3;" onclick="process(event)" valign="top"></canvas></td>
+		</tr>
+		</table>
+		<script>
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var area = document.getElementById('text');
+		function load() {
+			context.clearRect(0, 0, 1000, 1000);
+			var zoom = document.getElementById('zoom').value / 100;
+			var filesel = document.getElementById('filesel');
+			var imagefile =  filesel.files[0].name;
+			var image = new Image();
+			image.onload = function() {
+				context.drawImage(image,0,0,image.width*zoom,image.height*zoom);
+			};
+			image.src = imagefile;
+		}
+		var pointsx = [];
+		var pointsy = [];
+		var dists = [];
+
+		function cleartext () {
+			document.getElementById('text').value="";
+			window.location.reload();
+		}
+
+		function process (event) {
+			var rect = canvas.getBoundingClientRect();
+			var x = event.clientX - rect.left;
+			var y = event.clientY - rect.top;
+			pointsx.push(x);
+			pointsy.push(y);
+			var intersx;
+			var intersy;
+			var dir;
+			if (pointsx.length == 2) {
+				context.beginPath();
+				context.moveTo(pointsx[0], pointsy[0]);
+				context.lineTo(pointsx[1], pointsy[1]);
+ 			    context.lineWidth = 2;
+				context.strokeStyle = '#ffffff';
+				context.stroke();
+			}
+			if (pointsx.length > 2 && pointsx.length == 4) {
+				context.beginPath();
+				context.setLineDash([5, 3]);
+				context.moveTo(pointsx[2], pointsy[2]);
+				context.lineTo(pointsx[3], pointsy[3]);
+ 			    context.lineWidth = 2;
+				context.strokeStyle = '#ffffff';
+				context.stroke();
+			}
+			if (pointsx.length > 4 && pointsx.length == 6) {
+				context.beginPath();
+				context.setLineDash([0]);
+				context.moveTo(pointsx[4], pointsy[4]);
+				context.lineTo(pointsx[5], pointsy[5]);
+ 			    context.lineWidth = 2;
+				context.strokeStyle = '#ffffff';
+				context.stroke();
+			}
+			if (pointsx.length > 6) {
+				var newx = pointsx[pointsx.length-1];
+				var newy = pointsy[pointsy.length-1];
+
+				var slope1 = (pointsy[1]-pointsy[0])/(pointsx[1]-pointsx[0]);
+				var inter1 = pointsy[0] - (slope1 * pointsx[0]);
+				var perp_slope1 = -1/slope1;
+				var perp_inter1 = newy - (perp_slope1 * newx);
+				var intersx1 = (perp_inter1 - inter1) / (slope1 - perp_slope1);
+				var intersy1 = perp_slope1 * intersx1 + perp_inter1;
+				var dist1 = Math.sqrt(Math.pow(newx-intersx1,2)+Math.pow(newy-intersy1,2))
+//				alert(slope1+" "+inter1+" "+perp_slope1+" "+perp_inter1+" "+dist1)
+
+				var slope2 = (pointsy[5]-pointsy[4])/(pointsx[5]-pointsx[4]);
+				var inter2 = pointsy[4] - (slope2 * pointsx[4]);
+				var perp_slope2 = -1/slope2;
+				var perp_inter2 = newy - (perp_slope2 * newx);
+				var intersx2 = (perp_inter2 - inter2) / (slope2 - perp_slope2);
+				var intersy2 = perp_slope2 * intersx2 + perp_inter2;
+				var dist2 = Math.sqrt(Math.pow(newx-intersx2,2)+Math.pow(newy-intersy2,2))
+//				alert(slope2+" "+inter2+" "+perp_slope2+" "+perp_inter2+" "+dist2) 
+
+				if (dist1 < dist2) {
+					intersx = intersx1;
+					intersy = intersy1;
+					dist = dist1;
+					dir = 1;
+				} else {
+					intersx = intersx2;
+					intersy = intersy2;
+					dist = dist2;
+					dir = 2;
+				}
+//				alert(dist1+" or "+dist2+" : "+dist+" -> "+intersx+" "+intersy) 
+				context.setLineDash([0]);
+				context.beginPath();
+				context.moveTo(newx, newy);
+				context.lineTo(intersx, intersy);
+				dists.push(dir+"\t"+parseInt(dist));
+ 			    context.lineWidth = 2;
+				context.strokeStyle = '#ffffff';
+				context.stroke();
+				context.beginPath();
+				context.arc(newx, newy, 2, 0, 2 * Math.PI);
+				context.stroke();
+				area.value = dists.join('\n'); 
+			}
+		}
+		</script>
+	</body>
+</html
