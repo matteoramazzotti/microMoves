@@ -4,7 +4,7 @@ tools for measuring cell movements in microscopy
 <b>migraPix</b> helps in quantifying migration of cells in wound-healing assays and is especially useful in co-culture condition.
 
 The tool is a simple javascript-enabled html file that must be saved in the same folder of the images to be analyzed.
-Once started a a web page is opened in the web browser. A very simple interface is present at this moment.
+Once started a web page is opened in the web browser. A very simple interface is present at this moment.
 The processing of images is performed following procedure:
 1. click the "Browse" button and select the image to be analyzed.
 2. click the "Load image" button to show the image in the right panel. 
